@@ -29,4 +29,5 @@ def is_bipartite(graph: Graph) -> bool:
         if colors[i] == 0:
             if not bfs(i):
                 return False
+            
     return True
