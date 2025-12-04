@@ -1,32 +1,37 @@
+def is_safe(v, adj_list, path, pos):
+    u = path[pos - 1]
 
-def is_safe(v, adj_matrix, path, pos):
-    if adj_matrix[path[pos - 1]][v] == 0:
+    if v not in adj_list.get(u, []):
         return False
+
     if v in path[:pos]:
         return False
+
     return True
 
-def hamiltonian_util(adj_matrix, N, path, pos):
+def hamiltonian_util(adj_list, N, path, pos):
     if pos == N:
-        if adj_matrix[path[N - 1]][path[0]] == 1:
+        if path[0] in adj_list.get(path[N - 1], []):
             return True
         else:
             return False
 
     for i in range(N):
-        if is_safe(i, adj_matrix, path, pos):
+        if is_safe(i, adj_list, path, pos):
             path[pos] = i
-            if hamiltonian_util(adj_matrix, N, path, pos + 1):
+
+            if hamiltonian_util(adj_list, N, path, pos + 1):
                 return True
+
             path[pos] = -1
 
     return False
 
-def find_hamiltonian_cycle(adj_matrix, N):
+def find_hamiltonian_cycle(adj_list, N):
     path = [-1] * N
     path[0] = 0
 
-    if not hamiltonian_util(adj_matrix, N, path, 1):
+    if not hamiltonian_util(adj_list, N, path, 1):
         return "Гамільтонів цикл відсутній."
     else:
         return path + [path[0]]
