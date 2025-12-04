@@ -2,6 +2,13 @@ from collections import deque
 from utils import Graph # import graph from external file (Daniil does)
 
 def is_bipartite(graph: Graph) -> bool:
+    """
+    Checks if a graph is bipartite (2-colorable) using BFS.
+
+    A graph is bipartite if its nodes can be divided into two disjoint and independent
+    sets, such that every edge connects a node in one set to one in the other.
+    Equivalently, a graph is bipartite if it contains no odd cycles.
+    """
     num_vertices = len(graph)
     # 0: unvisited, 1: color A, -1: color B
     colors = [0] * num_vertices
