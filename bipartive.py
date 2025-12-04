@@ -1,5 +1,5 @@
 from collections import deque
-from utils import Graph # import graph from external file (Daniil does)
+from graph_structure import Graph # import graph from external file (Daniil does)
 
 def is_bipartite(graph: Graph) -> bool:
     """
