@@ -28,12 +28,12 @@ def solve_coloring(node, graph, colors, num_colors) -> bool:
             if solve_coloring(node + 1, graph, colors, num_colors):
                 return True
 
-            # backt4rack: if the choice didn't lead to a solution, undo it
+            # backttrack: if the choice didn't lead to a solution, undo it
             colors[node] = -1
 
     return False
 
-# idk if we need this 
+# idk if we need this
 if __name__ == "__main__":
     my_graph = [
         [1, 2, 5],
