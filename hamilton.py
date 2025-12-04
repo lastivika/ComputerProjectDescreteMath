@@ -30,4 +30,3 @@ def find_hamiltonian_cycle(adj_matrix, N):
         return "Гамільтонів цикл відсутній."
     else:
         return path + [path[0]]
-#юля молодець
