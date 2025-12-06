@@ -122,11 +122,11 @@ if criteria == 'path':
     euler_path, success = fleury_algorithm(GRAPH_G2, start_node)
     
     if success:
-        print(f"✅ Успіх! Ейлерів шлях знайдено. Початок з {start_node}:")
+        print(f"Ейлерів шлях знайдено. Початок з {start_node}:")
         print(" -> ".join(euler_path))
     else:
-        print("❌ Помилка: Не вдалося знайти шлях.")
+        print("Не вдалося знайти шлях.")
 elif criteria == 'cycle':
     print("Знайдено цикл, можна починати з будь-якої вершини.")
 else:
-    print("❌ Ні циклу, ні шляху не існує.")
+    print("Ні циклу, ні шляху не існує.")
