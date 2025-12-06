@@ -1,10 +1,8 @@
 
 def dfs_recursive(graph, u, visited):
     """Обхід у глибину для перевірки зв'язності (потрібно для is_bridge)."""
-    # Додаємо поточну вершину до відвіданих
     visited.add(u)
     
-    # Рекурсивно перевіряємо всіх сусідів
     for v in graph.get(u, []):
         if v not in visited:
             dfs_recursive(graph, v, visited)
@@ -26,22 +24,14 @@ def remove_edge(g, u, v):
 def is_bridge(g, u, v):
     """КЛЮЧОВА ПЕРЕВІРКА: Визначає, чи є ребро (u, v) мостом."""
     
-    # 1. Створюємо копію графа
     temp_graph = {k: list(v) for k, v in g.items()}
     
-    # 2. Тимчасово видаляємо ребро (u, v)
     remove_edge(temp_graph, u, v)
     
-    # 3. Перевіряємо, чи можемо ми все ще дістатися з u до v
     visited_u = set()
     dfs_recursive(temp_graph, u, visited_u)
     
-    # Якщо v не була відвідана після видалення, це міст
     return v not in visited_u
-
-# --------------------------
-# II. КРИТЕРІЙ ЕЙЛЕРОВОСТІ
-# --------------------------
 
 def is_connected(graph):
     """Перевіряє, чи є граф зв'язним (для початкової перевірки)."""
@@ -79,10 +69,6 @@ def check_euler_criteria(graph):
     else:
         return 'none', None
 
-# --------------------------
-# III. АЛГОРИТМ ФЛЕРІ (ПОБУДОВА)
-# --------------------------
-
 def fleury_algorithm(graph, start_node):
     """
     Алгоритм Флері: будує Ейлерів шлях/цикл, уникаючи мостів.
@@ -91,7 +77,6 @@ def fleury_algorithm(graph, start_node):
     path = []
     u = start_node
 
-    # Цикл працює, поки в графі є невикористані ребра
     while sum(len(v) for v in current_graph.values()) > 0:
         
         neighbors = current_graph.get(u, [])
@@ -99,21 +84,16 @@ def fleury_algorithm(graph, start_node):
         
         selected_edge = None
         
-        # Перевіряємо сусідів, застосовуючи правило Флері
         for v in neighbors:
             
-            # 1. Якщо це єдине ребро, мусимо його взяти (навіть якщо це міст)
             if len(neighbors) == 1:
                 selected_edge = (u, v)
                 break
             
-            # 2. Якщо є альтернативи, обираємо ребро, яке НЕ Є мостом
             if not is_bridge(current_graph, u, v):
                 selected_edge = (u, v)
                 break
         
-        # Якщо selected_edge досі None, це означає, що всі сусіди є мостами, 
-        # і їх більше одного. Просто беремо перший, як останній вибір.
         if not selected_edge:
             v = neighbors[0] 
             selected_edge = (u, v)
@@ -121,16 +101,11 @@ def fleury_algorithm(graph, start_node):
         u, v = selected_edge
         path.append(f"{u} -> {v}")
         remove_edge(current_graph, u, v)
-        u = v # Переходимо до нової вершини
+        u = v 
             
     all_edges_used = sum(len(v) for v in current_graph.values()) == 0
     return path, all_edges_used
 
-# --------------------------
-# IV. ТЕСТУВАННЯ
-# --------------------------
-
-# Тестовий Граф G2 (Ейлерів шлях, непарні: A, B)
 GRAPH_G2 = {
     'A': ['B', 'C', 'D'],
     'B': ['A', 'C', 'E'],
@@ -143,7 +118,7 @@ print("--- АНАЛІЗ ГРАФА G2 (ЕЙЛЕРІВ ШЛЯХ) ---")
 criteria, nodes = check_euler_criteria(GRAPH_G2)
 
 if criteria == 'path':
-    start_node = nodes[0] # Починаємо з непарної вершини
+    start_node = nodes[0] 
     euler_path, success = fleury_algorithm(GRAPH_G2, start_node)
     
     if success:
