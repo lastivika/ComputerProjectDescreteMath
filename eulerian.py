@@ -1,4 +1,3 @@
-
 def dfs_recursive(graph, u, visited):
     """Обхід у глибину для перевірки зв'язності (потрібно для is_bridge)."""
     visited.add(u)
@@ -45,29 +44,26 @@ def is_connected(graph):
     active_nodes = {n for n in nodes if n in graph and len(graph[n]) > 0}
     return len(visited) >= len(active_nodes)
 
-
 def check_euler_criteria(graph):
     """
-    Перевіряє граф на зв'язність і критерії парності.
+    ОНОВЛЕНО: Перевіряє граф лише на існування Ейлерового ЦИКЛУ.
     """
     if not is_connected(graph):
         return 'none', None
         
     odd_degree_vertices = []
     
-    for _, neighbors in graph.items():
+    for node, neighbors in graph.items():
         degree = len(neighbors)
         if degree % 2 != 0:
-            odd_degree_vertices.append(_)
+            odd_degree_vertices.append(node)
             
     num_odd = len(odd_degree_vertices)
     
     if num_odd == 0:
-        return 'cycle', None
-    elif num_odd == 2:
-        return 'path', odd_degree_vertices
+        return 'cycle', None 
     else:
-        return 'none', None
+        return 'none', None 
 
 def fleury_algorithm(graph, start_node):
     """
@@ -99,12 +95,14 @@ def fleury_algorithm(graph, start_node):
             selected_edge = (u, v)
 
         u, v = selected_edge
-        path.append(f"{u} -> {v}")
+        path.append(u)
+        path.append(v)
         remove_edge(current_graph, u, v)
         u = v 
             
     all_edges_used = sum(len(v) for v in current_graph.values()) == 0
-    return path, all_edges_used
+    final_path = [path[0]] + [path[i] for i in range(1, len(path), 2)]
+    return " -> ".join(final_path), all_edges_used
 
 GRAPH_G2 = {
     'A': ['B', 'C', 'D'],
@@ -114,19 +112,42 @@ GRAPH_G2 = {
     'E': ['B', 'C']
 }
 
-print("--- АНАЛІЗ ГРАФА G2 (ЕЙЛЕРІВ ШЛЯХ) ---")
-criteria, nodes = check_euler_criteria(GRAPH_G2)
+print("--- АНАЛІЗ ГРАФА G2 (ПОШУК ЕЙЛЕРОВОГО ЦИКЛУ) ---")
+criteria, _ = check_euler_criteria(GRAPH_G2)
 
-if criteria == 'path':
-    start_node = nodes[0] 
+if criteria == 'cycle':
+    start_node = next(iter(GRAPH_G2.keys())) 
     euler_path, success = fleury_algorithm(GRAPH_G2, start_node)
     
     if success:
-        print(f"Ейлерів шлях знайдено. Початок з {start_node}:")
-        print(" -> ".join(euler_path))
+        print(f"Ейлерів цикл знайдено. Початок з {start_node}:")
+        print(euler_path)
     else:
-        print("Не вдалося знайти шлях.")
-elif criteria == 'cycle':
-    print("Знайдено цикл, можна починати з будь-якої вершини.")
+        print("Не вдалося побудувати цикл, хоча критерії парності виконані.")
+elif criteria == 'path':
+    pass 
+else:
+    print("Ні Ейлерового циклу, ні шляху (з непарними вершинами) не відповідає критеріям ЦИКЛУ.")
+
+GRAPH_CYCLE = {
+    '1': ['2', '3', '4', '5'],
+    '2': ['1', '3', '4', '5'],
+    '3': ['1', '2', '4', '5'],
+    '4': ['1', '2', '3', '5'],
+    '5': ['1', '2', '3', '4']
+}
+
+print("\n--- АНАЛІЗ ГРАФА K5 (Повний граф, всі вершини мають степінь 4) ---")
+criteria_k5, _ = check_euler_criteria(GRAPH_CYCLE)
+
+if criteria_k5 == 'cycle':
+    start_node_k5 = '1' 
+    euler_path_k5, success_k5 = fleury_algorithm(GRAPH_CYCLE, start_node_k5)
+    
+    if success_k5:
+        print(f"Ейлерів цикл знайдено. Початок з {start_node_k5}:")
+        print(euler_path_k5)
+    else:
+        print("Не вдалося побудувати цикл.")
 else:
     print("Ні циклу, ні шляху не існує.")
