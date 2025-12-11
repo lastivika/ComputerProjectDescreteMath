@@ -1,124 +1,71 @@
-def read_graph_from_csv(filename, directed=False):
-    try:
-        from graph import Graph
-    except ImportError:
-        print("ПОМИЛКА: Не знайдено клас Graph!")
+def read_adjacency_matrix_from_csv(filename: str, directed: bool = False) -> list[list[int]] | None:
+    """
+    Reads a graph from a CSV file and returns its adjacency matrix.
+    The file must contain two columns: source vertex and destination vertex.
+    For undirected graphs, edges are mirrored.
+
+    :param filename: Path to the CSV file.
+    :param directed: Whether the graph is directed.
+    :return: Adjacency matrix as a list of lists, or None if the file is invalid.
+    """
+
+    if not isinstance(filename, str) or not filename.strip():
+        print("Error: filename must be a non-empty string.")
         return None
-    
-    graph = Graph(directed=directed)
-    
+
+    if not filename.lower().endswith(".csv"):
+        print(f"Error: file '{filename}' is not a CSV file.")
+        return None
+
+    edges = []
+    vertices = set()
+
     try:
-        with open(filename, 'r', encoding='utf-8') as file:
-            lines = file.readlines()
-        
-        if not lines:
-            print("Увага: файл порожній!")
-            return graph
-        
-        lines_read = 0
-        edges_added = 0
-        errors = 0
-        
-        for line_num, line in enumerate(lines, 1):
-            line = line.strip()
-            
-            if not line:
-                continue
-            
-            if line.startswith('#'):
-                continue
-            
-            lines_read += 1
-            parts = line.split(',')
-            
-            if len(parts) < 2:
-                print(f"Рядок {line_num}: '{line}' - недостатньо даних")
-                errors += 1
-                continue
-            
-            from_vertex = parts[0].strip()
-            to_vertex = parts[1].strip()
-            
-            if not from_vertex or not to_vertex:
-                print(f"Рядок {line_num}: порожні назви вершин")
-                errors += 1
-                continue
-            
-            weight = 1
-            
-            if len(parts) >= 3:
-                weight_str = parts[2].strip()
-                if weight_str:
-                    try:
-                        weight = float(weight_str)
-                    except ValueError:
-                        print(f"Рядок {line_num}: вага '{weight_str}' не число, використовуємо 1")
-                        weight = 1
-            
-            success = graph.add_edge(from_vertex, to_vertex, weight)
-            if success:
-                edges_added += 1
-            else:
-                errors += 1
-        
-        print(f"Файл успішно оброблено!")
-        print(f"Прочитано рядків: {lines_read}")
-        print(f"Додано ребер: {edges_added}")
-        print(f"Вершин у графі: {graph.vertex_count}")
-        print(f"Помилок: {errors}")
-        
-        return graph
-        
+        with open(filename, 'r', encoding='utf-8') as f:
+            for line_num, line in enumerate(f, 1):
+                clean = line.strip()
+
+                if not clean or clean.startswith('#'):
+                    continue
+
+                parts = clean.split(',')
+                if len(parts) != 2:
+                    print(f"Line {line_num}: invalid format '{clean}'. Expected 2 columns.")
+                    return None
+
+                u = parts[0].strip()
+                v = parts[1].strip()
+
+                if not u or not v:
+                    print(f"Line {line_num}: empty vertex name in '{clean}'.")
+                    return None
+
+                edges.append((u, v))
+                vertices.add(u)
+                vertices.add(v)
+
     except FileNotFoundError:
-        print(f"ПОМИЛКА: Файл '{filename}' не знайдено!")
+        print(f"Error: file '{filename}' not found.")
         return None
-    
     except Exception as e:
-        print(f"ПОМИЛКА: {e}")
+        print(f"Error reading file: {e}")
         return None
 
-def create_sample_csv(filename="graph_data.csv"):
-    sample_data = [
-        "A,B,5",
-        "A,C,3",
-        "B,D,2",
-        "C,D,1",
-        "D,E,4",
-        "E,F,2",
-        "B,E,6",
-        "F,A,7",
-        "G,H,10",
-        "H,I,8",
-        "G,I,15"
-    ]
-    
-    try:
-        with open(filename, 'w', encoding='utf-8') as file:
-            for line in sample_data:
-                file.write(line + '\n')
-        
-        print(f"Створено приклад файлу: {filename}")
-        return True
-        
-    except Exception as e:
-        print(f"Помилка при створенні файлу: {e}")
-        return False
+    if not edges:
+        print("Error: the file does not contain any valid edges.")
+        return None
 
-def save_graph_to_csv(graph, filename):
-    try:
-        with open(filename, 'w', encoding='utf-8') as file:
-            file.write("# Граф збережено з програми\n")
-            file.write("# from,to,weight\n")
-            
-            edges = graph.get_edges()
-            
-            for from_v, to_v, weight in edges:
-                file.write(f"{from_v},{to_v},{weight}\n")
-        
-        print(f"Граф збережено у файл: {filename}")
-        print(f"Збережено ребер: {len(edges)}")
-        return True
-        
-    except Exception as e:
-        print(f"Помилка при збереженні: {e}")
-        return False
+    sorted_vertices = sorted(vertices)
+    n = len(sorted_vertices)
+
+    matrix = [[0 for _ in range(n)] for _ in range(n)]
+    index = {v: i for i, v in enumerate(sorted_vertices)}
+
+    for u, v in edges:
+        ui = index[u]
+        vi = index[v]
+        matrix[ui][vi] = 1
+        if not directed:
+            matrix[vi][ui] = 1
+
+    return matrix
