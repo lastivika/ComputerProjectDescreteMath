@@ -61,9 +61,9 @@ def check_euler_criteria(graph):
     num_odd = len(odd_degree_vertices)
     
     if num_odd == 0:
-        return 'cycle', None  # All degrees are even: Euler Cycle exists
+        return 'cycle', None  
     else:
-        return 'none', None  # 2 odd degrees = Path, >2 odd = None (Only checking for cycle here)
+        return 'none', None  
 
 def fleury_algorithm(graph, start_node):
     """
@@ -82,18 +82,15 @@ def fleury_algorithm(graph, start_node):
         
         for v in neighbors:
             
-            # If only one edge remains, it must be taken (even if it's a bridge)
             if len(neighbors) == 1:
                 selected_edge = (u, v)
                 break
-            
-            # Try to select a non-bridge edge
+        
             if not is_bridge(current_graph, u, v):
                 selected_edge = (u, v)
                 break
         
         if not selected_edge:
-            # Fallback: if all remaining edges are bridges, select the first one (will only happen if the graph is disconnected after bridge removal)
             v = neighbors[0]  
             selected_edge = (u, v)
 
@@ -104,7 +101,6 @@ def fleury_algorithm(graph, start_node):
         u = v
             
     all_edges_used = sum(len(v) for v in current_graph.values()) == 0
-    # Reconstruct the path from (u, v) pairs to single nodes
     final_path = [path[0]] + [path[i] for i in range(1, len(path), 2)]
     return " -> ".join(final_path), all_edges_used
 
@@ -120,7 +116,7 @@ print("--- ANALYSIS OF GRAPH G2 (FINDING EULERIAN CYCLE) ---")
 criteria, _ = check_euler_criteria(GRAPH_G2)
 
 if criteria == 'cycle':
-    start_node = next(iter(GRAPH_G2.keys()))  # Start from any node
+    start_node = next(iter(GRAPH_G2.keys())) 
     euler_path, success = fleury_algorithm(GRAPH_G2, start_node)
     
     if success:
@@ -129,7 +125,7 @@ if criteria == 'cycle':
     else:
         print("Failed to construct the cycle, although the parity criteria are met.")
 elif criteria == 'path':
-    pass  # Skip path logic for now
+    pass  
 else:
     print("Neither an Eulerian cycle nor a path (with odd vertices) meets the CYCLE criteria.")
 
@@ -145,7 +141,7 @@ print("\n--- ANALYSIS OF GRAPH K5 (Complete graph, all vertices have degree 4) -
 criteria_k5, _ = check_euler_criteria(GRAPH_CYCLE)
 
 if criteria_k5 == 'cycle':
-    start_node_k5 = '1'  # Start from node '1'
+    start_node_k5 = '1'  
     euler_path_k5, success_k5 = fleury_algorithm(GRAPH_CYCLE, start_node_k5)
     
     if success_k5:
