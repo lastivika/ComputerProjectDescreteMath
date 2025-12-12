@@ -23,12 +23,12 @@ filename2 = args.filename_2
 starting_vertex = args.starting_vertex
 function = args.function
 
-graph_1 = graph_structure.read_graph_csv_to_binary_adjacency_matrix(filename1)
+graph_1 = graph_structure.get_adjacency_matrix(graph_structure.read_csv_to_graph(filename1))
 
 if function == 'check_isomorfim':
     if filename2 is None:
         raise SystemExit('При check_isomorfism потрібно вказати другий файл з графом (--filename_2)')
-    graph_2 = graph_structure.read_graph_csv_to_binary_adjacency_matrix(filename2)
+    graph_2 = graph_structure.get_adjacency_matrix(graph_structure.read_csv_to_graph(filename1))
     checker = isomorfism.isomorfism_check(graph_1, graph_2)
     if checker:
         print('Графи ізоморфні')
@@ -45,4 +45,4 @@ if function == 'find_eulerian':
     print(eulerian.fleury_algorithm(graph_1, starting_vertex))
 
 if function == 'is_bipartite':
-    print(bipartive.is_bipartite(graph_1))
+    print(bipartive.is_bipartite_matrix(graph_1))
