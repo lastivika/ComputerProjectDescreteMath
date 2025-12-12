@@ -1,3 +1,18 @@
+import argparse
+import sys
+
+
+parser = argparse.ArgumentParser(description='Change substring')
+
+parser.add_argument('graph1', help='The first graph')
+parser.add_argument('graph2', help='The second graph')
+
+args = parser.parse_args()
+arguments = sys.argv
+
+graph1 = args.graph1
+graph2 = args.graph2
+
 def turn_into_dict(graph: list[list[int]]) -> dict:
     """
     Turns adjacency matrix into a dict.
@@ -344,3 +359,16 @@ def isomorfism_check(graph1: dict | list[list[int]], graph2: dict | list[list[in
         return False
 
     return True
+
+'''if __name__ == '__main__':
+    print(graph1)
+    print(graph2)
+    isomorfism = isomorfism_check(graph1, graph2)
+    if isomorfism:
+        print('Ці два графи ізоморфні')
+    else:
+        print('Ці два графи неізоморфні')
+
+[[0, 1, 0, 1],[1, 0, 1, 0],[0, 1, 0, 1],[1, 0, 1, 0]]
+[[0, 1, 1, 0],[1, 0, 0, 1],[1, 0, 0, 1],[0, 1, 1, 0]]
+'''

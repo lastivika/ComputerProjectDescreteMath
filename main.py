@@ -11,10 +11,17 @@ parser = argparse.ArgumentParser(description='Change substring')
 
 
 parser.add_argument('filename_1', help='Name of the first CSV file with graph')
+<<<<<<< HEAD
 parser.add_argument('function', choices = ["check_isomorfim", "find_hamiltonian", "find_eulerian",\
  "is_bipartite"], help='Function which should be called')
 parser.add_argument('--filename_2', help='Name of the second CSV file with graph')
 parser.add_argument('--starting_vertex', type=int, help='Starting vertex')
+=======
+parser.add_argument('function', choices = ["check_isomorfism", "find_hamiltonian", "find_eulerian",\
+ "is_bipartite"], help='Function which should be called')
+parser.add_argument('--filename_2', help='Name of the second CSV file with graph')
+parser.add_argument('----starting_vertex', type=int, help='Starting vertex')
+>>>>>>> 59949b0deffef29c177cac8aa8b182995d8bf5d6
 
 args = parser.parse_args()
 
@@ -25,7 +32,11 @@ function = args.function
 
 graph_1 = graph_structure.get_adjacency_matrix(graph_structure.read_csv_to_graph(filename1))
 
+<<<<<<< HEAD
 if function == 'check_isomorfim':
+=======
+if function == 'check_isomorfism':
+>>>>>>> 59949b0deffef29c177cac8aa8b182995d8bf5d6
     if filename2 is None:
         raise SystemExit('При check_isomorfism потрібно вказати другий файл з графом (--filename_2)')
     graph_2 = graph_structure.get_adjacency_matrix(graph_structure.read_csv_to_graph(filename1))
