@@ -36,8 +36,7 @@ if function == 'check_isomorfim':
         print('Графи не ізоморфні')
 
 if function == 'find_hamiltonian':
-    print(hamilton.find_hamiltonian_cycle(graph_1, 0))
-
+    print(hamilton.find_hamiltonian_cycle(graph_1))
 
 if function == 'find_eulerian':
     if starting_vertex is None:
