@@ -14,14 +14,12 @@ parser.add_argument('filename_1', help='Name of the first CSV file with graph')
 parser.add_argument('function', choices = ["check_isomorfism", "find_hamiltonian", "find_eulerian",\
  "is_bipartite"], help='Function which should be called')
 parser.add_argument('--filename_2', help='Name of the second CSV file with graph')
-parser.add_argument('--starting_vertex', type=int, help='Starting vertex')
 
 
 args = parser.parse_args()
 
 filename1 = args.filename_1
 filename2 = args.filename_2
-starting_vertex = args.starting_vertex
 function = args.function
 
 
