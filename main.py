@@ -39,7 +39,7 @@ if function == 'find_hamiltonian':
     print(hamilton.find_hamiltonian_cycle(graph_1))
 
 if function == 'find_eulerian':
-    print(eulerian.fleury_algorithm(graph_1, graph_1[0][1]))
+    print(eulerian.fleury_algorithm(graph_1, 0))
 
 if function == 'is_bipartite':
     checker = bipartive.is_bipartite_matrix(graph_1)

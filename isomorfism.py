@@ -1,17 +1,7 @@
+# for compatibility with Python 3.9 (dict | list[list[int]] type hints)
+from __future__ import annotations
 import argparse
 import sys
-
-
-parser = argparse.ArgumentParser(description='Change substring')
-
-parser.add_argument('graph1', help='The first graph')
-parser.add_argument('graph2', help='The second graph')
-
-args = parser.parse_args()
-arguments = sys.argv
-
-graph1 = args.graph1
-graph2 = args.graph2
 
 def turn_into_dict(graph: list[list[int]]) -> dict:
     """
@@ -318,8 +308,8 @@ def weisfeiler_leman_test(graph_1: dict | list[list[int]], graph_2: dict | list[
             marks_1 = new_marks_1
             marks_2 = new_marks_2
 
-    marks_list_1 = sorted(marks_1)
-    marks_list_2 = sorted(marks_2)
+    marks_list_1 = sorted(marks_1.values())
+    marks_list_2 = sorted(marks_2.values())
 
     if marks_list_1 != marks_list_2:
         return False
@@ -360,15 +350,20 @@ def isomorfism_check(graph1: dict | list[list[int]], graph2: dict | list[list[in
 
     return True
 
-'''if __name__ == '__main__':
-    print(graph1)
-    print(graph2)
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='Check two graphs for isomorphism')
+    parser.add_argument('graph1', help='The first graph as adjacency matrix literal, e.g. "[[0,1],[1,0]]"')
+    parser.add_argument('graph2', help='The second graph as adjacency matrix literal, e.g. "[[0,1],[1,0]]"')
+    args = parser.parse_args()
+
+    try:
+        graph1 = eval(args.graph1)
+        graph2 = eval(args.graph2)
+    except Exception as exc:
+        raise SystemExit(f"Could not parse input graphs: {exc}")
+
     isomorfism = isomorfism_check(graph1, graph2)
     if isomorfism:
         print('Ці два графи ізоморфні')
     else:
         print('Ці два графи неізоморфні')
-
-[[0, 1, 0, 1],[1, 0, 1, 0],[0, 1, 0, 1],[1, 0, 1, 0]]
-[[0, 1, 1, 0],[1, 0, 0, 1],[1, 0, 0, 1],[0, 1, 1, 0]]
-'''
