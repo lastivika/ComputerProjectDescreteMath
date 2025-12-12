@@ -56,7 +56,7 @@ def solve_coloring(node, graph, colors, num_colors) -> bool:
 
 
 if __name__ == "__main__":
-    filename = "graph_matrix.txt" #====================
+    filename = "graph_matrix.txt" #write your file to visualise
 
     graph = read_adjacency_matrix(filename)
     colors = [-1] * len(graph)
