@@ -1,40 +1,28 @@
 from collections import deque
-from graph_structure import Graph # import graph from external file (Daniil does)
 
-def is_bipartite(graph: Graph) -> bool:
-    """
-    Checks if a graph is bipartite (2-colorable) using BFS.
+def is_bipartite_matrix(matrix: list[list[int]]) -> bool:
+    n = len(matrix)
+    colors = [0] * n
 
-    A graph is bipartite if its nodes can be divided into two disjoint and independent
-    sets, such that every edge connects a node in one set to one in the other.
-    Equivalently, a graph is bipartite if it contains no odd cycles.
-    """
-    num_vertices = len(graph)
-    # 0: unvisited, 1: color A, -1: color B
-    colors = [0] * num_vertices
-
-    def bfs(node):
-        if colors[node] != 0:
-            return True
-        queue = deque([node])
-        colors[node] = 1
+    def bfs(start):
+        queue = deque([start])
+        colors[start] = 1
 
         while queue:
-            curr_node = queue.popleft()
-            for neighbour in graph[curr_node]:
-                # if neigh has the same color - not biparte
-                if colors[neighbour] == colors[curr_node]:
-                    return False
-                # if neigh was not visited.- give opposite color
-                elif colors[neighbour] == 0:
-                    colors[neighbour] = (-1) * colors[curr_node]
-                    queue.append(neighbour)
+            node = queue.popleft()
+
+            for neigh in range(n):
+                if matrix[node][neigh] != 0:          # є ребро
+                    if colors[neigh] == colors[node]:
+                        return False
+                    if colors[neigh] == 0:
+                        colors[neigh] = -colors[node]
+                        queue.append(neigh)
         return True
 
-    for i in range(num_vertices):
-        # start BFS only when node is unvisited
-        if colors[i] == 0:
-            if not bfs(i):
+    for v in range(n):
+        if colors[v] == 0:
+            if not bfs(v):
                 return False
 
     return True
