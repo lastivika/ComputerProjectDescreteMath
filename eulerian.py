@@ -119,3 +119,4 @@ def fleury_algorithm(graph, start_node):
     all_edges_used = sum(len(v) for v in current_graph.values()) == 0
     final_path = [path[0]] + [path[i] for i in range(1, len(path), 2)]
     return " -> ".join(final_path), all_edges_used
+

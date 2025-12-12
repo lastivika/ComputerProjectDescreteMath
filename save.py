@@ -1,28 +1,4 @@
-import argparse
-import sys
-
-
-parser = argparse.ArgumentParser(description='Change substring')
-
-parser.add_argument('graph1', help='The first graph')
-parser.add_argument('graph2', help='The second graph')
-
-args = parser.parse_args()
-arguments = sys.argv
-
-graph1 = args.graph1
-graph2 = args.graph2
-
 def turn_into_dict(graph: list[list[int]]) -> dict:
-    """
-    Turns adjacency matrix into a dict.
-
-    Args:
-        graph (list); A graph given as a adjacency matrix
-
-    Returns:
-        dict: This same graph but represented as dict
-    """
     graph_dict = {}
     for i in range(len(graph)):
         graph_dict[i] = []
@@ -257,20 +233,13 @@ def weisfeiler_leman_test(graph_1: dict | list[list[int]], graph_2: dict | list[
         graph_2, (dict): The second graph
 
     Returns:
-        bool: True if the conducted test is successful
+        bool: True if two graphs are isomorofic
     """
-    if isinstance(graph_1, list):
-        graph1 = turn_into_dict(graph_1)
-        graph_1 = graph1
-
-        graph2 = turn_into_dict(graph_2)
-        graph_2 = graph2
-
-
     k = find_diameter_of_graph(graph_1)
     if k is None:
         k = 4
 
+    print('DIAMETER', k)
     marks_1 = {}
     marks_2 = {}
 
@@ -325,50 +294,3 @@ def weisfeiler_leman_test(graph_1: dict | list[list[int]], graph_2: dict | list[
         return False
 
     return True
-
-
-def isomorfism_check(graph1: dict | list[list[int]], graph2: dict | list[list[int]]) -> bool:
-    """
-    Conducts all tests to find isomorfism or its absence.
-
-    Args:
-        graph1 (dict) | (list): The first graph, given as a adjacency matrix or
-                                        as a dictionary
-        graph2 (dict) | (list): The second graph, given as a adjacency matrix or
-                                        as a dictionary
-
-    Returns:
-        bool: True if two graphs are isomorfic
-    """
-    if isinstance(graph1, list):
-        graph_1 = turn_into_dict(graph1)
-        graph1 = graph_1
-
-        graph_2 = turn_into_dict(graph2)
-        graph2 = graph_2
-
-    if all([check_vertices(graph1, graph2),
-            check_edges(graph1, graph2),
-            check_degrees(graph1, graph2),
-            check_connection(graph1) == check_connection(graph2),
-            find_diameter_of_graph(graph1) == find_diameter_of_graph(graph2)]) is False:
-        return False
-
-
-    if weisfeiler_leman_test(graph1, graph2) is False:
-        return False
-
-    return True
-
-'''if __name__ == '__main__':
-    print(graph1)
-    print(graph2)
-    isomorfism = isomorfism_check(graph1, graph2)
-    if isomorfism:
-        print('Ці два графи ізоморфні')
-    else:
-        print('Ці два графи неізоморфні')
-
-[[0, 1, 0, 1],[1, 0, 1, 0],[0, 1, 0, 1],[1, 0, 1, 0]]
-[[0, 1, 1, 0],[1, 0, 0, 1],[1, 0, 0, 1],[0, 1, 1, 0]]
-'''
