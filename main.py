@@ -16,12 +16,14 @@ parser.add_argument('function', choices = ["check_isomorfism", "find_hamiltonian
 parser.add_argument('--filename_2', help='Name of the second CSV file with graph')
 parser.add_argument('--starting_vertex', type=int, help='Starting vertex')
 
+
 args = parser.parse_args()
 
 filename1 = args.filename_1
 filename2 = args.filename_2
 starting_vertex = args.starting_vertex
 function = args.function
+
 
 graph_1 = graph_structure.get_adjacency_matrix(graph_structure.read_csv_to_graph(filename1))
 
@@ -39,9 +41,11 @@ if function == 'find_hamiltonian':
     print(hamilton.find_hamiltonian_cycle(graph_1))
 
 if function == 'find_eulerian':
-    if starting_vertex is None:
-        raise SystemExit('При find_eulerian потрібно вказати початкову вершину (--starting_vertex)')
-    print(eulerian.fleury_algorithm(graph_1, starting_vertex))
+    print(eulerian.fleury_algorithm(graph_1, graph_1[0][1]))
 
 if function == 'is_bipartite':
-    print(bipartive.is_bipartite_matrix(graph_1))
+    checker = bipartive.is_bipartite_matrix(graph_1)
+    if checker:
+        print('Граф двочастковий')
+    else:
+        print('Граф не двочастковий')
