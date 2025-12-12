@@ -41,7 +41,7 @@ def hamiltonian_util(adj_matrix, N, path, pos):
     return False
 
 
-def find_hamiltonian_cycle(adj_matrix, N):
+def find_hamiltonian_cycle(adj_matrix):
     """
     Find a Hamiltonian cycle in a graph represented by an adjacency matrix.
 
@@ -50,6 +50,7 @@ def find_hamiltonian_cycle(adj_matrix, N):
     :return: list[int] representing the Hamiltonian cycle including return to start,
              or str message if no Hamiltonian cycle exists
     """
+    N = len(adj_matrix)
     path = [-1] * N
     path[0] = 0
 
