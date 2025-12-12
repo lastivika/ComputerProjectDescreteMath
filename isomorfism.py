@@ -1,5 +1,3 @@
-# for compatibility with Python 3.9 (dict | list[list[int]] type hints)
-from __future__ import annotations
 import argparse
 import sys
 
